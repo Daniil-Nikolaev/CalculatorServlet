@@ -11,25 +11,20 @@ public class HistoryServlet extends HttpServlet {
 
      @Override
      protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-         String response=String.valueOf(read());
-         resp.getWriter().write(response);
+         StringBuilder stringBuilder = new StringBuilder();
+         String string;
+         BufferedReader br = new BufferedReader(new FileReader(history));
+
+         while ((string = br.readLine()) != null) {
+             stringBuilder.append(string);
+             stringBuilder.append("\n");
+         }
+         resp.getWriter().write(String.valueOf(stringBuilder));
      }
 
     public void write(String s) throws IOException {
         OutputStream out = new FileOutputStream(history,true);
         out.write(s.getBytes());
         out.write("\n".getBytes());
-    }
-
-    public StringBuilder read() throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
-        String string;
-        BufferedReader br = new BufferedReader(new FileReader(history));
-
-        while ((string = br.readLine()) != null) {
-            stringBuilder.append(string);
-            stringBuilder.append("\n");
-        }
-        return stringBuilder;
     }
 }
